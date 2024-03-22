@@ -39,15 +39,15 @@ WHERE s.name = 'MGM'
 SELECT title
 FROM movie
 WHERE length > (SELECT length
-				FROM movie
-				WHERE title = 'Star Wars' AND year = 1977)
+		FROM movie
+		WHERE title = 'Star Wars' AND year = 1977)
 
 -- Задача 5 -- Тълкувание 2 - има много филми с име 'Star Wars'.
 SELECT title
 FROM movie
 WHERE length > ALL (SELECT length
-					FROM movie
-					WHERE title = 'Star Wars')
+		    FROM movie
+		    WHERE title = 'Star Wars')
 
 USE pc
 
@@ -74,8 +74,8 @@ USE movies
 SELECT name
 FROM moviestar
 WHERE gender = 'F' AND name IN (SELECT name
-								FROM movieexec
-								WHERE networth > 10000000)
+				FROM movieexec
+				WHERE networth > 10000000)
 
 USE pc
 
