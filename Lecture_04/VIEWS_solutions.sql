@@ -1,4 +1,4 @@
-USE mods
+USE ships
 
 -- Задача 1 --
 GO
