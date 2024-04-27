@@ -108,7 +108,7 @@ SELECT DISTINCT e.name
 FROM movie m
     JOIN starsin s ON m.title = s.movietitle AND m.year = s.movieyear
     JOIN movieexec e ON m.producerc# = e.cert#
-WHERE starname = 'Harrison Ford'
+WHERE s.starname = 'Harrison Ford'
 
 -- Задача 12 --
 SELECT name
