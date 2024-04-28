@@ -1,4 +1,3 @@
-﻿
 USE pc
 
 -- 1.1. Напишете заявка, която извежда средната честота на компютрите
@@ -7,7 +6,7 @@ SELECT AVG(speed)
 FROM pc
 
 -- 1.2. Напишете заявка, която извежда средния размер на екраните на 
---      лаптопите  за всеки производител
+--      лаптопите за всеки производител
 
 SELECT maker, AVG(screen)
 FROM laptop
@@ -51,7 +50,7 @@ FROM pc
 GROUP BY speed
 
 -- 1.7. Напишете заявка, която извежда производителите, които са 
---      произвели поне по 3 различни модела компютъра
+--      произвели поне по 3 различни модела компютри
 
 SELECT maker
 FROM product
@@ -68,7 +67,7 @@ FROM product
 WHERE price = (SELECT MAX(price) FROM pc)
 
 -- 1.9. Напишете заявка, която извежда средната цена на компютрите 
---      за всяка честота по-голяма от 800
+--      за всяка честота, по-голяма от 800
 
 SELECT speed, AVG(price) AveragePrice
 FROM pc
@@ -76,7 +75,7 @@ WHERE speed > 800
 GROUP BY speed
 
 -- 1.10. Напишете заявка, която извежда средния размер на диска на 
---       тези компютри произведени от производители, които произвеждат 
+--       тези компютри, произведени от производители, които произвеждат 
 --       и принтери
 
 SELECT AVG(hd) AverageHD
@@ -98,81 +97,81 @@ USE ships
 -- 2.1. Напишете заявка, която извежда броя на класовете кораби
 
 SELECT COUNT(*) AS ClassCount
-FROM CLASSES
+FROM classes
 
 -- 2.2. Напишете заявка, която извежда средния брой на оръжия за 
 --      всички кораби, пуснати на вода
 
-SELECT AVG(NUMGUNS) AverageGuns
-FROM CLASSES c
-    JOIN SHIPS s ON c.CLASS = s.CLASS
+SELECT AVG(numguns) AverageGuns
+FROM classes c
+    JOIN ships s ON c.class = s.class
 
--- 2.3. Напишете заявка, която извежда за всеки клас първата и 
---      последната година, в която кораб от съответния клас е пуснат на вода
+-- 2.3. Напишете заявка, която за всеки клас извежда първата и 
+--      последната година, в която кораб от съответния клас е бил пуснат на вода
 
-SELECT CLASS, MIN(LAUNCHED) AS FirstYear, MAX(LAUNCHED) AS LastYear
-FROM SHIPS
-GROUP BY CLASS
+SELECT class, MIN(launched) AS FirstYear, MAX(launched) AS LastYear
+FROM ships
+GROUP BY class
 
--- 2.4. Напишете заявка, която извежда броя на корабите потънали в битка 
+-- 2.4. Напишете заявка, която извежда броя на корабите, потънали в битка, 
 --      според класа
 
 -- ако не се интересуваме от класовете без потънали кораби и класовете без кораби
 
-SELECT s.CLASS, COUNT(*) AS SunkCount
-FROM SHIPS s
-   JOIN OUTCOMES o ON s.NAME = o.SHIP
-WHERE o.RESULT = 'sunk'
-GROUP BY s.CLASS
+SELECT s.class, COUNT(*) AS SunkCount
+FROM ships s
+   JOIN outcomes o ON s.name = o.ship
+WHERE o.result = 'sunk'
+GROUP BY s.class
 
 -- ако се интересуваме от класовете без потънали кораби и класовете без кораби
 
 -- решение 1
 
-SELECT s.CLASS, COUNT(o.SHIP) AS SunkCount
-FROM CLASSES c
-   LEFT OUTER JOIN SHIPS s ON c.CLASS = s.CLASS
-   LEFT OUTER JOIN OUTCOMES o ON s.NAME = o.SHIP AND o.RESULT = 'sunk'
-GROUP BY s.CLASS
+SELECT s.class, COUNT(o.ship) AS SunkCount
+FROM classes c
+   LEFT OUTER JOIN ships s ON c.class = s.class
+   LEFT OUTER JOIN outcomes o ON s.name = o.ship AND o.result = 'sunk'
+GROUP BY s.class
 
 -- решение 2
 
-SELECT c.CLASS, SUM(CASE o.RESULT 
+SELECT c.class, SUM(CASE o.result 
                         WHEN 'sunk' THEN 1
                         ELSE 0
                     END) AS SunkCount
-FROM CLASSES c
-   LEFT OUTER JOIN SHIPS s ON c.CLASS = s.CLASS
-   LEFT OUTER JOIN OUTCOMES o ON s.NAME = o.SHIP
-GROUP BY c.CLASS
+FROM classes c
+   LEFT OUTER JOIN ships s ON c.class = s.class
+   LEFT OUTER JOIN outcomes o ON s.name = o.ship
+GROUP BY c.class
 
--- 2.5. Напишете заявка, която извежда броя на корабите потънали в битка 
---      според класа, за тези класове с повече от 4 пуснати на вода кораба
+-- 2.5. Напишете заявка, която извежда броя на корабите, потънали в битка, 
+--      според класа за тези класове с повече от 4 пуснати на вода кораба
 
 -- решение 1
 
-SELECT s.CLASS, COUNT(s.NAME) ShipCount
-FROM SHIPS s
-    JOIN OUTCOMES o ON s.NAME = o.SHIP
-WHERE o.RESULT = 'sunk' AND s.CLASS IN (SELECT CLASS
-                                        FROM SHIPS
-                                        GROUP BY CLASS
+SELECT s.class, COUNT(s.NAME) ShipCount
+FROM ships s
+    JOIN outcomes o ON s.name = o.ship
+WHERE o.result = 'sunk' AND s.class IN (SELECT class
+                                        FROM ships
+                                        GROUP BY class
                                         HAVING COUNT(*) > 4)
-GROUP BY s.CLASS
+GROUP BY s.class
 
 -- решение 2
 
-SELECT s.CLASS, SUM(CASE o.RESULT
+SELECT s.class, SUM(CASE o.result
                        WHEN 'sunk' THEN 1
                        ELSE 0
                     END) ShipCount
-FROM SHIPS s
-    LEFT OUTER JOIN OUTCOMES o ON s.NAME = o.SHIP
-GROUP BY s.CLASS
-HAVING COUNT(DISTINCT s.NAME) > 4
+FROM ships s
+    LEFT OUTER JOIN outcomes o ON s.name = o.ship
+GROUP BY s.class
+HAVING COUNT(DISTINCT s.name) > 4
 
--- 2.6. Напишете заявка, която извежда средното тегло на корабите, за всяка страна. 
+-- 2.6. Напишете заявка, която извежда средното тегло на корабите за всяка страна
 
-SELECT COUNTRY, AVG(DISPLACEMENT) AVG_WEIGHT
-FROM CLASSES
-GROUP BY COUNTRY
+SELECT country, AVG(displacement) AverageWeight
+FROM classes
+GROUP BY country
