@@ -103,7 +103,7 @@ FROM CLASSES
 -- 2.2. Напишете заявка, която извежда средния брой на оръжия за 
 --      всички кораби, пуснати на вода
 
-SELECT AVG(NUMGUNS) AgerageGuns
+SELECT AVG(NUMGUNS) AverageGuns
 FROM CLASSES c
     JOIN SHIPS s ON c.CLASS = s.CLASS
 
