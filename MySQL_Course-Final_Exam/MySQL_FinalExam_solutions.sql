@@ -37,9 +37,9 @@ USE ships;
 SELECT class
 FROM classes
 WHERE class NOT IN (SELECT class
-					FROM ships
-						JOIN outcomes ON name = ship
-					WHERE result = 'damaged');
+		    FROM ships
+			    JOIN outcomes ON name = ship
+		    WHERE result = 'damaged');
                     
 -- 8:
 USE pc;
