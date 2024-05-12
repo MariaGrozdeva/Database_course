@@ -57,8 +57,7 @@ FOR EACH ROW
 BEGIN
     IF EXISTS (SELECT *
 		FROM product p
-                WHERE (p.maker = NEW.maker AND p.type = 'PC' AND NEW.type = 'Printer') OR
-						(p.maker = NEW.maker AND p.type = 'Printer' AND NEW.type = 'PC')
+                WHERE (p.maker = NEW.maker AND p.type = 'PC' AND NEW.type = 'Printer') OR (p.maker = NEW.maker AND p.type = 'Printer' AND NEW.type = 'PC')
     ) THEN
 	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data Integrity Violation';
     END IF;
