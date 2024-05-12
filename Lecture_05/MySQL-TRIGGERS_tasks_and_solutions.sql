@@ -9,9 +9,9 @@ DELIMITER //
 CREATE TRIGGER AddBruceWillis AFTER INSERT ON movie 
 FOR EACH ROW
 BEGIN
-	IF (NEW.title LIKE '%save%' AND NEW.title LIKE '%world%')
-		THEN INSERT INTO starsin VALUES (NEW.title, NEW.year, 'Bruce Willis');
-	END IF;
+    IF (NEW.title LIKE '%save%' AND NEW.title LIKE '%world%')
+	THEN INSERT INTO starsin VALUES (NEW.title, NEW.year, 'Bruce Willis');
+    END IF;
 END //
 DELIMITER ;
 
@@ -28,19 +28,18 @@ DELIMITER //
 CREATE TRIGGER NetworthEnfore BEFORE INSERT ON movieexec
 FOR EACH ROW
 BEGIN
-	DECLARE average_networth_before_insert DECIMAL(50, 10);
+    DECLARE average_networth_before_insert DECIMAL(50, 10);
     DECLARE average_networth_after_insert DECIMAL(50, 10);
     DECLARE rows_count_before_insert INT;
     
     SELECT AVG(networth) INTO average_networth_before_insert FROM movieexec;
-	SELECT COUNT(networth) INTO rows_count_before_insert FROM movieexec;
+    SELECT COUNT(networth) INTO rows_count_before_insert FROM movieexec;
     
-    SET average_networth_after_insert = 
-		(average_networth_before_insert * rows_count_before_insert + NEW.networth) / rows_count_before_insert + 1;
+    SET average_networth_after_insert = (average_networth_before_insert * rows_count_before_insert + NEW.networth) / rows_count_before_insert + 1;
     
     IF (average_networth_after_insert < 500000) THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data Integrity Violation';
-	END IF;
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data Integrity Violation';
+    END IF;
 END //
 DELIMITER ;
 
@@ -56,12 +55,12 @@ DELIMITER //
 CREATE TRIGGER ProductEnforce BEFORE INSERT ON product
 FOR EACH ROW
 BEGIN
-	IF EXISTS (SELECT *
-				FROM product p
+    IF EXISTS (SELECT *
+		FROM product p
                 WHERE (p.maker = NEW.maker AND p.type = 'PC' AND NEW.type = 'Printer') OR
 						(p.maker = NEW.maker AND p.type = 'Printer' AND NEW.type = 'PC')
-	) THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data Integrity Violation';
+    ) THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data Integrity Violation';
     END IF;
 END //
 DELIMITER ;
@@ -77,11 +76,11 @@ DELIMITER //
 CREATE TRIGGER PcEnforce BEFORE INSERT ON pc
 FOR EACH ROW
 BEGIN
-	IF EXISTS (SELECT *
-				FROM laptop l
+    IF EXISTS (SELECT *
+		FROM laptop l
                 WHERE l.ram > NEW.ram AND l.price < NEW.price
-	) THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data Integrity Violation';
+    ) THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data Integrity Violation';
     END IF;
 END //
 DELIMITER ;
@@ -95,11 +94,11 @@ DELIMITER //
 CREATE TRIGGER LaptopEnforce BEFORE INSERT ON laptop
 FOR EACH ROW
 BEGIN
-	IF EXISTS (SELECT *
-				FROM pc
-                WHERE pc.ram < NEW.ram AND pc.price > NEW.price
-	) THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data Integrity Violation';
+    IF EXISTS (SELECT *
+		FROM pc
+         	WHERE pc.ram < NEW.ram AND pc.price > NEW.price
+    ) THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data Integrity Violation';
     END IF;
 END //
 DELIMITER ;
