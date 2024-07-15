@@ -5,3 +5,4 @@
 - **Тема 3** : Групирания. Агрегатни функции.  
 - **Тема 4** : DML statements. Insert, update, delete. Изгледи.  
 - **Тема 5** : Тригери – after/instead of triggers.  
+- **Тема 6** : Променливи. Условни конструкции. Цикли. Временни таблици. Функции – scalar-valued functions, table-valued functions.  
